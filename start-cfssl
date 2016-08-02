@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -eo pipefail
 
@@ -8,6 +8,7 @@ if [ -z "${CFSSL_CA_HOST}" ]; then
 fi
 
 if [ ! -f "ca.pem" ];then
+  echo "Creating ca.json"
   cat <<EOF > ca.json
 {
   "hosts": [
@@ -33,6 +34,7 @@ if [ -n "${CFSSL_CA_AUTH_KEY}"]; then
 fi
 
 if [ ! -f ${CFSSL_CA_POLICY_FILE} ]; then
+  echo "Creating ca.json"
   cat <<EOF > ${CFSSL_CA_POLICY_FILE}
 {
   "signing": {
@@ -76,9 +78,3 @@ EOF
   cfssl gencert -ca ca.pem -ca-key ca-key.pem -hostname "${CFSSL_CA_HOST}" server.json | cfssljson -bare server
   cat server.pem ca.pem > server-bundle.pem
 fi
-
-cfssl serve -address=localhost -port=8888 -config=${CFSSL_CA_POLICY_FILE} -ca-bundle=/etc/cfssl/ca-bundle.crt -int-bundle=/etc/cfssl/int-bundle.crt -int-dir=/etc/cfssl/data/intermediates &
-
-exec nginx -c /etc/nginx/nginx.conf
-
-# vim: set ft=sh:
