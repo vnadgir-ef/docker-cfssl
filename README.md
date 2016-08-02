@@ -3,7 +3,7 @@
 This is a dockerized version of https://github.com/cloudflare/cfssl.
 
 ```
-$ docker run -p 8888:8888 -v /tmp/kubernetes:/etc/cfssl -e CXFSSL_ADDRESS=0.0.0.0 fabric8/cfssl
+$ docker run -p 8888:8888 -v /tmp/kubernetes/data:/etc/cfssl/data -e CXFSSL_ADDRESS=0.0.0.0 quay.io/vnadgir_ef/docker-cfssl
 ```
 
 This will generate a key & certificate and the will be available at `/tmp/kubernetes/data`
